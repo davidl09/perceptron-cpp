@@ -5,9 +5,8 @@
 #include <random>
 
 int main() {
-    static constexpr size_t epochs = 5000, batchSize = 100;
-    static constexpr double learningRate = 1e-2;
-
+    static constexpr size_t epochs = 50000, batchSize = 100;
+    static constexpr double learningRate = 1e-3, threshhold = 1e-4;
     auto model = Perceptron<double>::newFromJson("model.json");
 
     std::cout << model;
@@ -15,7 +14,7 @@ int main() {
     std::vector<std::pair<double, double>> values(1000);
     for (int i = 0; i < values.size(); ++i) {
         values[i].first = (static_cast<double>(i) / values.size() - 0.5) * 2 * std::numbers::pi;
-        values[i].second = std::pow(values[i].first, 2) / 10;
+        values[i].second = std::sin(4 * values[i].first);
     }
 
     std::mt19937 gen(std::random_device{}());
@@ -29,6 +28,9 @@ int main() {
         }
         epochError /= batchSize;
         std::cout << "Error for epoch " << i + 1 << ": " << epochError << '\n';
+        if (epochError <= threshhold) {
+            break;
+        }
     }
 
     std::vector<std::pair<double, double>> testData(1000);
@@ -39,13 +41,9 @@ int main() {
 
     Gnuplot gp;
 
-    gp << "plot '-' with lines title 'Predicted', '-' with lines title 'cos(x)'\n";
+    gp << "plot '-' with lines title 'Predicted', '-' with lines title 'Actual'\n";
     gp.send(testData);
     gp.send(values);
 
     gp.flush();
-/*
-    // Keep the plot window open
-    std::cout << "Press enter to exit." << std::endl;
-    std::cin.get();*/
 }

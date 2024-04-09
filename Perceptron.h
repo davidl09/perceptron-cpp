@@ -125,9 +125,8 @@ public:
 
         for (auto layer = layers.rbegin(); layer < layers.rend(); ++layer) {
             VectorX<T> delta = outputError.cwiseProduct(layer->activation_dx(layer->output)); // Element-wise multiplication
-            layer->bias += learningRate * delta; // Update bias
 
-            //MatrixX<T> weightChange = learningRate * delta * layer->input.transpose(); // Weight change
+            layer->bias += learningRate * delta; // Update bias
             layer->weights += learningRate * delta * layer->input.transpose(); // Weight change; // Update weights
 
             outputError = (layer->weights.transpose() * delta).eval(); // Error for the previous layer
