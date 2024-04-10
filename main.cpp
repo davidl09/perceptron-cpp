@@ -24,7 +24,7 @@ int main() {
         double epochError = 0;
         for (int j = 0; j < params.getBatchSize(); ++j) {
             auto index = dist(gen);
-            epochError += model.updateWeights({values[index].first}, {values[index].second}, params.getLearningRate());
+            epochError += model.updateWeights(std::vector{values[index].first}, std::vector{values[index].second}, params.getLearningRate());
         }
         epochError /= params.getBatchSize();
         std::cout << "Error for epoch " << i + 1 << ": " << epochError << '\n';

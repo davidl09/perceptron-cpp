@@ -1,1 +1,0 @@
-{"inputs":1,"layers":[{"activation":"tanh","size":16},{"activation":"tanh","size":16},{"activation":"tanh","size":16},{"activation":"none","size":1}]}

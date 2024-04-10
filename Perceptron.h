@@ -13,6 +13,7 @@
 #include <random>
 
 #include "writematrix.h"
+#include "TrainingParams.h"
 
 using namespace Eigen;
 namespace ranges = std::ranges;
@@ -44,8 +45,13 @@ public:
         return {result.begin(), result.end()};
     }
 
-    double updateWeights(const std::vector<T>& data, const std::vector<T>& target, T learningRate = 1e-3) {
-        VectorX<T> input = Map<VectorX<T>, Unaligned>(const_cast<T *>(data.data()), data.size()), targetOut = Map<VectorX<T>, Unaligned>(const_cast<T *>(target.data()), target.size());
+    double updateWeights(VectorX<T>&& input, VectorX<T>&& targetOut, T learningRate = 1e-5) {
+        if (input.size() != this->numInputs()) {
+            throw std::invalid_argument("Input dimensionality " + std::to_string(input.size()) + " does not match model input dimensions " + std::to_string(this->inputSize));
+        }
+        if (targetOut.size() != this->numOutputs()) {
+            throw std::invalid_argument("Input dimensionality " + std::to_string(input.size()) + " does not match model input dimensions " + std::to_string(this->inputSize));
+        }
 
         for (auto& layer : layers) {
             input = layer.propagate(input);
@@ -66,6 +72,15 @@ public:
         }
 
         return error;
+
+    }
+
+    double updateWeights(const std::vector<T>& data, const std::vector<T>& target, T learningRate = 1e-5) {
+        VectorX<T>
+                input = Map<VectorX<T>, Unaligned>(const_cast<T *>(data.data()), data.size()),
+                targetOut = Map<VectorX<T>, Unaligned>(const_cast<T *>(target.data()), target.size());
+
+        return updateWeights(std::move(input), std::move(targetOut), learningRate);
     }
 
     static json readAndValidateModelJson(const fs::path& filename) {
@@ -316,22 +331,31 @@ private:
         const ACTIVATION activationFuncID;
     };
 
-/*
+
     class PerceptronTrainer {
     public:
         explicit PerceptronTrainer(Perceptron<T>& model_)
-        : model(model_) {
+        : model(model_) {}
 
-        }
+        void train(std::span<std::pair<std::vector<T>, std::vector<T>>> trainData, TrainingParams params) {
+            std::mt19937 gen(std::random_device{}());
+            std::uniform_int_distribution dist(0, trainData.size());
+            assert(dist.max() == trainData.size() - 1);
 
-        void train(std::vector<std::pair<T, T>>&& trainData) {
-
+            for (size_t epoch = 0; epoch < params.getEpochs(); ++epoch) {
+                double epochError = 0;
+                for (size_t batch = 0; batch < params.getBatchSize(); ++batch) {
+                    const auto& sample = trainData[dist(gen)];
+                    epochError += model.updateWeights(sample.first, sample.second, params.getLearningRate());
+                }
+                std::cout << "Error for epoch " << epoch + 1 << ": " << epochError / params.getBatchSize() << '\n';
+            }
         }
 
     private:
         Perceptron<T>& model;
     };
-*/
+
 
     static constexpr auto parseActivationFuncStr = [](std::string_view name) -> ACTIVATION {
         static const std::unordered_map<std::string_view, ACTIVATION> map {
