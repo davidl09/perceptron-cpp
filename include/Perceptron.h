@@ -14,22 +14,7 @@
 
 #include "writematrix.h"
 #include "TrainingParams.h"
-
-using namespace Eigen;
-namespace ranges = std::ranges;
-using namespace nlohmann;
-namespace fs = std::filesystem;
-
-template <typename T>
-concept Scalar = std::is_floating_point<T>::value;
-
-enum class ACTIVATION {
-    SIGMOID,
-    RELU,
-    TANH,
-    NONE,
-};
-
+#include "defs.h"
 
 template <Scalar T>
 class Perceptron {
@@ -332,12 +317,13 @@ private:
     };
 
 
+/*
     class PerceptronTrainer {
     public:
-        explicit PerceptronTrainer(Perceptron<T>& model_)
+        explicit PerceptronTrainer(Perceptron<T>& model_, std::vector<T>&& train, std::vector<T>&& )
         : model(model_) {}
 
-        void train(std::span<std::pair<std::vector<T>, std::vector<T>>> trainData, TrainingParams params) {
+        void train(std::pair<std::span<T>, std::span<T>> trainData, TrainingParams params) {
             std::mt19937 gen(std::random_device{}());
             std::uniform_int_distribution dist(0, trainData.size());
             assert(dist.max() == trainData.size() - 1);
@@ -354,7 +340,9 @@ private:
 
     private:
         Perceptron<T>& model;
+        std::vector<T> trainInput, trainResult;
     };
+*/
 
 
     static constexpr auto parseActivationFuncStr = [](std::string_view name) -> ACTIVATION {

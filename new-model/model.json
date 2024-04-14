@@ -1,0 +1,9 @@
+{
+  "inputs": 7200,
+  "layers": [
+    {"activation": "tanh", "size": 320},
+    {"activation": "tanh", "size": 48},
+    {"activation": "tanh", "size": 16},
+    {"activation": "none", "size": 1}
+  ]
+}

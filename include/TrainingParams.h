@@ -8,8 +8,7 @@
 #include <nlohmann/json.hpp>
 #include <fstream>
 
-namespace fs = std::filesystem;
-using namespace nlohmann;
+#include "defs.h"
 
 class TrainingParams {
 public:
@@ -19,6 +18,12 @@ public:
             std::string fileContents((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
             try {
                 data = json::parse(fileContents);
+
+                for (const std::string str : {"epochs", "batchSize", "threshold", "learningRate"}) {
+                    if (not data.contains(str)) {
+                        throw std::invalid_argument("Missing value " + str + " from JSON file " + jsonFilePath.string());
+                    }
+                }
 
                 epochs = data["epochs"].template get<size_t>();
                 batchSize = data["batchSize"].template get<size_t>();

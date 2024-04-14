@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/example.dir/sin_example.cpp.o -o ../example  -ltbb -lboost_iostreams -lboost_system -lboost_filesystem 
