@@ -1,1 +1,0 @@
-/usr/bin/c++ "CMakeFiles/new-model.dir/main.cpp.o" -o /home/davidl09/CLionProjects/perceptron/new-model/new-model 

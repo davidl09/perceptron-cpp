@@ -11,5 +11,6 @@ int main(int argc, char *argv[]) {
     const fs::path jsonPath{argv[1]};
 
     auto model = Perceptron<double>::newFromJson(jsonPath);
-    model.saveToFolder(jsonPath.string() + ".model");
+    const auto name = jsonPath.string().substr(0, jsonPath.string().find('.'));
+    model.saveToFolder(name);
 }

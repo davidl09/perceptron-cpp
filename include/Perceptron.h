@@ -5,16 +5,13 @@
 #ifndef PERCEPTRON_PERCEPTRON_H
 #define PERCEPTRON_PERCEPTRON_H
 
-#include <eigen3/Eigen/Core>
-#include <eigen3/Eigen/Dense>
-
+#include "defs.h"
 #include <nlohmann/json.hpp>
 #include <fstream>
 #include <random>
-
 #include "writematrix.h"
 #include "TrainingParams.h"
-#include "defs.h"
+
 
 template <Scalar T>
 class Perceptron {

@@ -5,11 +5,9 @@
 #ifndef PERCEPTRON_WRITEMATRIX_H
 #define PERCEPTRON_WRITEMATRIX_H
 
-#include <eigen3/Eigen/Dense>
-#include <eigen3/Eigen/Core>
+#include "defs.h"
 #include <iostream>
 #include <cstdio>
-#include <filesystem>
 
 namespace fs = std::filesystem;
 using namespace Eigen;

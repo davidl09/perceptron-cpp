@@ -5,10 +5,10 @@
 #ifndef PERCEPTRON_TRAININGPARAMS_H
 #define PERCEPTRON_TRAININGPARAMS_H
 
+#include "defs.h"
 #include <nlohmann/json.hpp>
 #include <fstream>
 
-#include "defs.h"
 
 class TrainingParams {
 public:

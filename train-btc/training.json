@@ -1,0 +1,6 @@
+{
+  "epochs": 200,
+  "learningRate": 1e-1,
+  "batchSize": 5,
+  "threshold": 1e-3
+}
